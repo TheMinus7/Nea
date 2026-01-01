@@ -1,0 +1,78 @@
+@import "tailwindcss/preflight";
+@import "tailwindcss/utilities";
+
+:root {
+  --bg: #f2fbff;
+  --fg: #162634;
+  --card: rgba(255, 255, 255, 0.62);
+  --border: rgba(22, 38, 52, 0.14);
+  --muted: rgba(22, 38, 52, 0.68);
+  --accent: #d6b15a;
+}
+
+html,
+body {
+  height: 100%;
+}
+
+body {
+  background: radial-gradient(1100px 650px at 22% 12%, #e8fbff 0%, var(--bg) 55%, #f4f6ff 100%);
+  color: var(--fg);
+}
+
+.container-neaw {
+  width: min(1080px, calc(100% - 32px));
+  margin: 0 auto;
+}
+
+.card-neaw {
+  background: var(--card);
+  border: 1px solid var(--border);
+  backdrop-filter: blur(10px);
+  border-radius: 20px;
+}
+
+.btn-neaw {
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 10px 14px;
+  background: rgba(255, 255, 255, 0.6);
+}
+
+.btn-neaw:hover {
+  border-color: rgba(30, 42, 56, 0.24);
+}
+
+.title-neaw {
+  position: relative;
+  transition: transform 200ms ease, color 200ms ease;
+}
+
+.title-neaw::after {
+  content: "❄";
+  position: absolute;
+  margin-left: 10px;
+  opacity: 0;
+  transform: translateY(2px);
+  transition: opacity 200ms ease, transform 200ms ease;
+  color: var(--accent);
+}
+
+.title-neaw:hover {
+  transform: translateY(-1px);
+}
+
+.title-neaw:hover::after {
+  opacity: 1;
+  transform: translateY(0px);
+}
+
+.link-neaw {
+  text-decoration: underline;
+  text-decoration-color: rgba(30, 42, 56, 0.25);
+  text-underline-offset: 4px;
+}
+
+.link-neaw:hover {
+  text-decoration-color: rgba(201, 162, 77, 0.9);
+}
