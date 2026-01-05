@@ -23,6 +23,8 @@ export default function SignUpPage() {
 
                 <h1 className="mt-2 text-2xl md:text-3xl font-semibold tracking-tight">Welcome Nea</h1>
                 <p className="mt-3 text-sm md:text-base" style={{ opacity: 0.92 }}>
+                   Энэ сайтад байрлах захиа ирээдүйгээс ирсэн байж болзошгүй.
+                  <br />
                  Бүх зүйл цаг нь ирэхээр болно.
                   <br />
                   Тиймээс энэхүү сайт нь бэлэгний зориулалттай юм. Гэхдээ бас ...
