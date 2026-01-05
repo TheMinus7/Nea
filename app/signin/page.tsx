@@ -2,9 +2,27 @@
 
 import { signIn } from "next-auth/react";
 import { useRouter, useSearchParams } from "next/navigation";
-import { useMemo, useState } from "react";
+import { Suspense, useMemo, useState } from "react";
 
 export default function SignInPage() {
+  return (
+    <Suspense
+      fallback={
+        <main className="min-h-screen auth-bg py-10 flex items-center justify-center">
+          <div className="container-neaw">
+            <div className="mx-auto max-w-4xl auth-card">
+              <div className="auth-right p-7 md:p-10">Loading...</div>
+            </div>
+          </div>
+        </main>
+      }
+    >
+      <SignInInner />
+    </Suspense>
+  );
+}
+
+function SignInInner() {
   const router = useRouter();
   const searchParams = useSearchParams();
 
@@ -22,13 +40,12 @@ export default function SignInPage() {
           <div className="grid md:grid-cols-2">
             <div className="auth-left p-7 md:p-10">
               <div className="auth-left-inner">
-               
                 <h1 className="mt-2 text-2xl md:text-3xl font-semibold tracking-tight">Welcome Nea</h1>
                 <p className="mt-3 text-sm md:text-base" style={{ opacity: 0.92 }}>
                   Бүх зүйл цаг нь ирэхээр болно.
                   <br />
                   Тиймээс энэхүү сайт нь бэлэгний зориулалттай юм. Нэхдээ бас ...
-                   <br />
+                  <br />
                   Таалагдана гэж найдаж байна.
                 </p>
               </div>
