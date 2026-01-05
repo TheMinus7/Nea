@@ -4,6 +4,24 @@ import prisma from "@/lib/prisma";
 
 export const runtime = "nodejs";
 
+function getDbEnvInfo() {
+  const databaseUrl = process.env.DATABASE_URL;
+  const directUrl = process.env.DIRECT_URL;
+  const raw = databaseUrl || directUrl;
+  try {
+    if (!raw) return { hasDatabaseUrl: !!databaseUrl, hasDirectUrl: !!directUrl, host: null, port: null };
+    const u = new URL(raw);
+    return {
+      hasDatabaseUrl: !!databaseUrl,
+      hasDirectUrl: !!directUrl,
+      host: u.hostname,
+      port: u.port || null,
+    };
+  } catch {
+    return { hasDatabaseUrl: !!databaseUrl, hasDirectUrl: !!directUrl, host: null, port: null };
+  }
+}
+
 export async function POST(req: Request) {
   if (!process.env.DATABASE_URL && !process.env.DIRECT_URL) {
     return NextResponse.json({ error: "Auth is not configured yet" }, { status: 503 });
@@ -41,7 +59,7 @@ export async function POST(req: Request) {
     const code = typeof (e as { code?: unknown })?.code === "string" ? (e as { code: string }).code : "";
     const lower = msg.toLowerCase();
 
-    console.error("/api/signup failed", { code, msg });
+    console.error("/api/signup failed", { code, msg, db: getDbEnvInfo() });
 
     if (
       code === "P2021" ||
