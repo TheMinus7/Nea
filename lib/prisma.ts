@@ -16,7 +16,7 @@ if (!connectionString) {
 try {
   const u = new URL(connectionString);
   const host = u.hostname.toLowerCase();
-  if (process.env.NODE_ENV !== "production" && (host.endsWith(".supabase.co") || host.endsWith(".supabase.com"))) {
+  if (host.endsWith(".supabase.co") || host.endsWith(".supabase.com")) {
     process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0";
   }
 } catch {
