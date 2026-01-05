@@ -37,7 +37,34 @@ export async function POST(req: Request) {
 
     return NextResponse.json({ user }, { status: 201 });
   } catch (e) {
-    console.error("/api/signup failed", e);
+    const msg = typeof (e as { message?: unknown })?.message === "string" ? (e as { message: string }).message : "";
+    const code = typeof (e as { code?: unknown })?.code === "string" ? (e as { code: string }).code : "";
+    const lower = msg.toLowerCase();
+
+    console.error("/api/signup failed", { code, msg });
+
+    if (
+      code === "P2021" ||
+      code === "P2022" ||
+      code === "P1001" ||
+      code === "P1002" ||
+      code === "P1017" ||
+      lower.includes("relation") ||
+      lower.includes("table") ||
+      lower.includes("column") ||
+      lower.includes("does not exist") ||
+      lower.includes("timeout") ||
+      lower.includes("connect")
+    ) {
+      return NextResponse.json(
+        {
+          error:
+            "DB тохиргоо/хүснэгт дээр асуудал байна. Vercel дээр DATABASE_URL (мөн боломжтой бол DIRECT_URL) зөв эсэхийг шалгаад, migration ажиллуулах хэрэгтэй: npx prisma migrate deploy",
+        },
+        { status: 500 }
+      );
+    }
+
     return NextResponse.json({ error: "Unexpected error" }, { status: 500 });
   }
 }
