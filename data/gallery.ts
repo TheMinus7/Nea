@@ -20,7 +20,7 @@ export const GALLERY: GalleryItem[] = [
     title: "Баярлалт",
     note: "энэ story-г нь бас хараад их баярлаж байсийн hh. Ашгүй ойр ойрхон уулзаж чадах нь УРА УРА гээл хаха.",
     images:[
-      { src: "/photos/33.png", alt: "33", note: "", igUrl: "" }
+      { src: "/photos/33.PNG", alt: "33", note: "", igUrl: "" }
     ]
   },
   {
