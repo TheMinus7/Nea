@@ -1,0 +1,4 @@
+-- AlterTable
+ALTER TABLE "Dream" ADD COLUMN     "email" TEXT NOT NULL DEFAULT '',
+ADD COLUMN     "ner" TEXT NOT NULL DEFAULT '',
+ADD COLUMN     "utas" TEXT;

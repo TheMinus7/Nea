@@ -2,6 +2,8 @@ import { NextResponse } from "next/server";
 import bcrypt from "bcryptjs";
 import prisma from "@/lib/prisma";
 
+export const runtime = "nodejs";
+
 export async function POST(req: Request) {
   if (!process.env.DATABASE_URL && !process.env.DIRECT_URL) {
     return NextResponse.json({ error: "Auth is not configured yet" }, { status: 503 });
@@ -11,7 +13,7 @@ export async function POST(req: Request) {
     const body = (await req.json()) as { email?: string; password?: string };
 
     const email = body.email?.trim().toLowerCase();
-    const password = body.password;
+    const password = body.password?.trim();
 
     if (!email || !password) {
       return NextResponse.json({ error: "Missing email or password" }, { status: 400 });
@@ -34,7 +36,8 @@ export async function POST(req: Request) {
     });
 
     return NextResponse.json({ user }, { status: 201 });
-  } catch {
+  } catch (e) {
+    console.error("/api/signup failed", e);
     return NextResponse.json({ error: "Unexpected error" }, { status: 500 });
   }
 }

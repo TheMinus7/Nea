@@ -5,8 +5,10 @@ import Image from "next/image";
 import type { GalleryItem } from "@/data/gallery";
 
 export default function Gallery({ items }: { items: GalleryItem[] }) {
+  const [expandedNotes, setExpandedNotes] = useState<Record<string, boolean>>({});
   const [open, setOpen] = useState<null | {
     title: string;
+    imageTitle?: string;
     src: string;
     alt?: string;
     titleNote?: string;
@@ -18,15 +20,27 @@ export default function Gallery({ items }: { items: GalleryItem[] }) {
     <section className="pb-10">
       <div className="container-neaw">
         <div className="grid gap-4 md:gap-5">
-          {items.map((t) => (
-            <div key={t.id} className="card-neaw px-6 py-5">
+          {items.map((t, idx) => (
+            <div key={t.id} className={`card-neaw card-neaw-variant-${(idx % 3) + 1} px-4 py-4 md:px-6 md:py-5`}>
               <div className="flex items-start justify-between gap-4">
                 <div className="min-w-0">
                   <h2 className="text-lg md:text-xl font-semibold tracking-tight title-neaw">{t.title}</h2>
                   {t.note ? (
-                    <p className="mt-2 text-sm md:text-base" style={{ color: "var(--muted)" }}>
-                      {t.note}
-                    </p>
+                    <>
+                      <p
+                        className={`mt-2 text-sm md:text-base ${expandedNotes[t.id] ? "" : "note-clamp"}`}
+                        style={{ color: "var(--muted)" }}
+                      >
+                        {t.note}
+                      </p>
+                      <button
+                        type="button"
+                        className="mt-2 link-neaw text-xs md:hidden"
+                        onClick={() => setExpandedNotes((s) => ({ ...s, [t.id]: !s[t.id] }))}
+                      >
+                        {expandedNotes[t.id] ? "Хураах" : "Дэлгэрэнгүй"}
+                      </button>
+                    </>
                   ) : null}
                 </div>
                 <div className="text-xs md:text-sm" style={{ color: "var(--muted)" }}>
@@ -34,9 +48,15 @@ export default function Gallery({ items }: { items: GalleryItem[] }) {
                 </div>
               </div>
 
-              <div className="mt-4 grid grid-cols-2 md:grid-cols-3 gap-3">
+              <div
+                className={
+                  t.images.length === 1
+                    ? "mt-4 grid grid-cols-1 place-items-center gap-3"
+                    : "mt-4 grid grid-cols-2 md:grid-cols-3 gap-3"
+                }
+              >
                 {t.images.map((img) => (
-                  <div key={img.src} className="min-w-0">
+                  <div key={img.src} className={t.images.length === 1 ? "min-w-0 w-full max-w-sm" : "min-w-0"}>
                     <button
                       type="button"
                       className="relative overflow-hidden rounded-2xl border w-full"
@@ -44,6 +64,7 @@ export default function Gallery({ items }: { items: GalleryItem[] }) {
                       onClick={() =>
                         setOpen({
                           title: t.title,
+                          imageTitle: img.title,
                           src: img.src,
                           alt: img.alt ?? t.title,
                           titleNote: t.note,
@@ -57,10 +78,15 @@ export default function Gallery({ items }: { items: GalleryItem[] }) {
                         alt={img.alt ?? t.title}
                         width={900}
                         height={600}
+                        unoptimized
                         className="h-40 md:h-48 w-full object-cover"
                         sizes="(min-width: 768px) 33vw, 50vw"
                       />
                     </button>
+
+                    {img.title ? (
+                      <div className="mt-2 text-xs md:text-sm font-medium">{img.title}</div>
+                    ) : null}
 
                     {img.note ? (
                       <div className="mt-2 text-xs md:text-sm" style={{ color: "var(--muted)" }}>
@@ -98,6 +124,7 @@ export default function Gallery({ items }: { items: GalleryItem[] }) {
                 <div className="text-xs md:text-sm" style={{ color: "var(--muted)" }}>
                   {open.title}
                 </div>
+                {open.imageTitle ? <div className="mt-1 text-sm md:text-base font-medium">{open.imageTitle}</div> : null}
                 {open.titleNote ? (
                   <div className="mt-1 text-sm md:text-base" style={{ color: "var(--muted)" }}>
                     {open.titleNote}
@@ -129,6 +156,7 @@ export default function Gallery({ items }: { items: GalleryItem[] }) {
                   alt={open.alt ?? open.title}
                   fill
                   sizes="100vw"
+                  unoptimized
                   className="object-contain bg-white/40"
                 />
               </div>

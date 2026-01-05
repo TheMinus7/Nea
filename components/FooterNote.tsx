@@ -9,9 +9,10 @@ export default function FooterNote() {
             <div className="text-sm" style={{ color: "var(--muted)" }}>
               Hidden page
             </div>
-            <div className="text-base md:text-lg font-semibold">/note</div>
+            <br />
+            <div className="text-base md:text-lg font-semibold">Нууцхан захидал</div>
             <div className="text-sm md:text-base" style={{ color: "var(--muted)" }}>
-              Энэ хуудас menu дээр харагдахгүй, зөвхөн мэддэг хүн л орох хувилбар.
+              Энэ хуудас menu дээр харагдахгүй.
             </div>
           </div>
 

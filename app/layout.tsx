@@ -1,6 +1,13 @@
 import "./globals.css";
 import Providers from "./providers";
 
+export const metadata = {
+  title: "ArchNea",
+  icons: {
+    icon: "/icon",
+  },
+};
+
 export default function RootLayout({
   children,
 }: {

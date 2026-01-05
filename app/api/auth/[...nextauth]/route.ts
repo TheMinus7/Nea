@@ -3,6 +3,8 @@ import CredentialsProvider from "next-auth/providers/credentials";
 import bcrypt from "bcryptjs";
 import prisma from "@/lib/prisma";
 
+export const runtime = "nodejs";
+
 export const authOptions: NextAuthOptions = {
   secret: process.env.NEXTAUTH_SECRET,
   session: {
@@ -16,21 +18,36 @@ export const authOptions: NextAuthOptions = {
         password: { label: "Password", type: "password" },
       },
       async authorize(credentials: Record<"email" | "password", string> | undefined) {
-        const email = credentials?.email?.trim().toLowerCase();
-        const password = credentials?.password;
+        try {
+          const email = credentials?.email?.trim().toLowerCase();
+          const password = credentials?.password?.trim();
 
-        if (!email || !password) return null;
+          if (!email || !password) return null;
 
-        const user = await prisma.user.findUnique({
-          where: { email },
-        });
+          const user = await prisma.user.findUnique({
+            where: { email },
+          });
 
-        if (!user) return null;
+          if (!user) {
+            console.warn("[auth] authorize: user not found", { email });
+            return null;
+          }
 
-        const ok = await bcrypt.compare(password, user.passwordHash);
-        if (!ok) return null;
+          const ok = await bcrypt.compare(password, user.passwordHash);
+          if (!ok) {
+            console.warn("[auth] authorize: password mismatch", {
+              email,
+              passwordHashLength: user.passwordHash.length,
+            });
+            return null;
+          }
 
-        return { id: user.id, email: user.email };
+          console.info("[auth] authorize: success", { email });
+          return { id: user.id, email: user.email };
+        } catch (e) {
+          console.error("[auth] authorize: error", e);
+          return null;
+        }
       },
     }),
   ],

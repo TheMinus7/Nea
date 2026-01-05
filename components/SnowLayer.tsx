@@ -17,9 +17,9 @@ export default function SnowLayer({ enabled }: { enabled: boolean }) {
   const config = useMemo(() => {
     return {
       count: isMobile ? 22 : 60,
-      speed: isMobile ? [0.35, 0.9] : [0.35, 0.8],
+      speed: isMobile ? [0.8,.9] : [0.8, 0.8],
       wind: isMobile ? [0, 0.25] : [0, 0.18],
-      radius: isMobile ? [0.7, 1.8] : [0.8, 2.0],
+      radius: isMobile ? [1.5, 3.5] : [1.6, 3.8],
     };
   }, [isMobile]);
 
@@ -80,7 +80,13 @@ export default function SnowLayer({ enabled }: { enabled: boolean }) {
       last = now;
 
       ctx.clearRect(0, 0, w, h);
-      ctx.fillStyle = "rgba(255, 255, 255, 0.9)";
+      ctx.fillStyle = "rgba(255, 245, 250, 0.94)";
+      ctx.strokeStyle = "rgba(255, 170, 205, 0.22)";
+      ctx.lineWidth = 0.75;
+      ctx.shadowColor = "rgba(255, 130, 190, 0.28)";
+      ctx.shadowBlur = 6;
+      ctx.shadowOffsetX = 0;
+      ctx.shadowOffsetY = 0;
 
       for (const f of flakes) {
         f.phase += 0.02 * dt;
@@ -101,6 +107,7 @@ export default function SnowLayer({ enabled }: { enabled: boolean }) {
         ctx.beginPath();
         ctx.arc(f.x, f.y, f.r, 0, Math.PI * 2);
         ctx.fill();
+        ctx.stroke();
       }
 
       rafRef.current = requestAnimationFrame(tick);

@@ -12,4 +12,21 @@ model User {
   passwordHash String
   createdAt    DateTime @default(now())
   updatedAt    DateTime @updatedAt
+
+  dream        Dream?
+}
+
+model Dream {
+  id         String   @id @default(cuid())
+  userId     String   @unique
+  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  ner        String   @default("")
+  utas       String?
+  email      String   @default("")
+  husel      String   @default("")
+  zorilgo    String   @default("")
+  tolovlogoo String   @default("")
+  biylelt    String   @default("")
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
 }
